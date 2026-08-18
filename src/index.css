@@ -1,0 +1,195 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Unbounded", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Anton", "Unbounded", sans-serif;
+  --color-bg: #000000;
+  --color-accent: #ff0000;
+  --color-ink: #ffffff;
+  --color-near-white: #ebebeb;
+  --color-near-black: #020202;
+  --color-grey: #666666;
+  --spacing-edge: clamp(16px, 4.2vw, 48px);
+  --spacing-section: clamp(48px, 8vw, 128px);
+  --spacing-gap: clamp(8px, 1.1vw, 18px);
+  --header-h: calc(56px + env(safe-area-inset-top, 0px));
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 860px) {
+  :root {
+    --header-h: calc(72px + env(safe-area-inset-top, 0px));
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    overflow-x: clip;
+  }
+  body {
+    margin: 0;
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-variant-numeric: slashed-zero;
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+  }
+  img,
+  canvas {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+  video {
+    display: block;
+    max-width: 100%;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  section {
+    scroll-margin-top: var(--header-h);
+  }
+}
+
+/* 16:9 stage that fits width AND leftover viewport height */
+.media-stage {
+  width: min(
+    92vw,
+    calc((100svh - var(--header-h) - 7.25rem) * 16 / 9),
+    1500px
+  );
+}
+.media-stage--reel {
+  --media-w: 75vw;
+}
+.media-stage--trailer {
+  --media-w: 62vw;
+}
+@media (min-width: 860px) {
+  .media-stage {
+    width: min(
+      var(--media-w, 75vw),
+      calc((100svh - var(--header-h) - 6.5rem) * 16 / 9),
+      1500px
+    );
+  }
+}
+@media (max-height: 540px) and (orientation: landscape) {
+  .media-stage {
+    width: min(58vw, calc((100svh - 4.5rem) * 16 / 9));
+  }
+}
+
+.scroll-x {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.scroll-x::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 699px) {
+  .manifesto-type {
+    font-size: clamp(13px, calc((48vw - 2rem) / 8.8), 19px);
+  }
+}
+
+@media (min-width: 700px) {
+  .manifesto-type {
+    font-size: clamp(32px, 5.8vw, 96px);
+  }
+}
+
+/* Logo.png is a red mark on a solid white field. Invert + screen drops the
+   white; multiply re-tints the mark to accent red. Needs a black backdrop. */
+.logo {
+  position: relative;
+  display: block;
+  isolation: isolate;
+  background: #000;
+  line-height: 0;
+}
+.logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: invert(1) grayscale(1) brightness(3);
+  mix-blend-mode: screen;
+}
+.logo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--color-accent);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.group-wedge {
+  height: 9vh;
+  background: var(--color-accent);
+  pointer-events: none;
+  position: relative;
+  z-index: 6;
+}
+.group-wedge--top {
+  clip-path: polygon(0% 100%, 100% 0%, 100% 100%, 0% 100%);
+  margin-bottom: -1px;
+}
+.group-wedge--bottom {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 0%);
+  margin-top: -1px;
+}
+
+.spot__layer--lit {
+  --pw: 36%;
+  --ph: 23%;
+  -webkit-mask-image: radial-gradient(
+    ellipse var(--pw) var(--ph) at 50% 50%,
+    #000 0%,
+    #000 38%,
+    rgba(0, 0, 0, 0.42) 66%,
+    transparent 86%
+  );
+  mask-image: radial-gradient(
+    ellipse var(--pw) var(--ph) at 50% 50%,
+    #000 0%,
+    #000 38%,
+    rgba(0, 0, 0, 0.42) 66%,
+    transparent 86%
+  );
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.ribbon__item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 130px;
+  margin: -65px 0 0 -50px;
+  will-change: offset-distance;
+  backface-visibility: hidden;
+}
+@media (max-width: 860px) {
+  .ribbon__item {
+    width: 74px;
+    height: 96px;
+    margin: -48px 0 0 -37px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
