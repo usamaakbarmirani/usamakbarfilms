@@ -17,11 +17,11 @@ export function FilmBlock({ film, className, children }: FilmBlockProps) {
       id={film.id}
       className={cn('relative bg-black [&+&]:border-t [&+&]:border-white/10', className)}
     >
-      <FilmTitle no={film.no} name={film.title} tag={film.tag} body={film.body} />
+      <FilmTitle name={film.title} tag={film.tag} body={film.body} />
       {film.video ? (
         <Player src={film.video.src} label={film.video.label} loop={film.video.loop} />
       ) : null}
-      <FramesLabel count={film.frames.length} />
+      <FramesLabel />
       <HorizontalReel frames={film.frames} />
       {children}
     </article>

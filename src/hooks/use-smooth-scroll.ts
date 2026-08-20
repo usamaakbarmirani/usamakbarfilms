@@ -6,6 +6,10 @@ export type SmoothScroll = {
   scrollTo: (y: number) => void
 }
 
+export function scrollToTop() {
+  window.uafSmooth?.scrollTo(0) ?? window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
 export function useSmoothScroll() {
   useEffect(() => {
     if (useReducedMotion() || useIsTouch()) return
@@ -38,6 +42,7 @@ export function useSmoothScroll() {
 
     const onWheel = (e: WheelEvent) => {
       if (e.ctrlKey) return
+      if (document.documentElement.dataset.lightbox === 'open') return
       e.preventDefault()
       target = Math.max(0, Math.min(maxScroll(), target + e.deltaY))
       kick()

@@ -121,28 +121,28 @@ export function Player({ src, label = 'Trailer', loop = true, className }: Playe
           step={0.05}
           value={current}
           aria-label="Seek"
-          className="h-[3px] w-full cursor-pointer appearance-none bg-white/18 accent-[#ff0000] [&::-webkit-slider-thumb]:size-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-accent"
+          className="h-8 w-full cursor-pointer appearance-none bg-transparent accent-[#ff0000] [&::-webkit-slider-runnable-track]:h-[3px] [&::-webkit-slider-runnable-track]:bg-white/18 [&::-webkit-slider-thumb]:relative [&::-webkit-slider-thumb]:top-[-5px] [&::-webkit-slider-thumb]:size-3.5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-accent"
           onChange={(e) => seekTo(Number(e.target.value))}
         />
         <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <button
               type="button"
-              className="cursor-pointer border-0 bg-transparent p-0 font-sans text-[0.66rem] tracking-[0.2em] text-white uppercase opacity-80 hover:text-accent hover:opacity-100"
+              className="min-h-11 cursor-pointer border-0 bg-transparent px-1 font-sans text-[0.66rem] tracking-[0.2em] text-white uppercase opacity-80 hover:text-accent hover:opacity-100"
               onClick={toggle}
             >
               {playing ? 'Pause' : 'Play'}
             </button>
             <button
               type="button"
-              className="cursor-pointer border-0 bg-transparent p-0 font-sans text-[0.66rem] tracking-[0.2em] text-white uppercase opacity-80 hover:text-accent hover:opacity-100"
+              className="min-h-11 cursor-pointer border-0 bg-transparent px-1 font-sans text-[0.66rem] tracking-[0.2em] text-white uppercase opacity-80 hover:text-accent hover:opacity-100"
               onClick={() => seekTo(current - 10)}
             >
               −10s
             </button>
             <button
               type="button"
-              className="cursor-pointer border-0 bg-transparent p-0 font-sans text-[0.66rem] tracking-[0.2em] text-white uppercase opacity-80 hover:text-accent hover:opacity-100"
+              className="min-h-11 cursor-pointer border-0 bg-transparent px-1 font-sans text-[0.66rem] tracking-[0.2em] text-white uppercase opacity-80 hover:text-accent hover:opacity-100"
               onClick={() => seekTo(current + 10)}
             >
               +10s

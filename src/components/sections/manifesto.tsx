@@ -180,7 +180,7 @@ export function Manifesto({ stills }: ManifestoProps) {
           <span
             ref={probe}
             aria-hidden
-            className="pointer-events-none invisible absolute aspect-video w-[min(52vw,10.5rem)] min-[700px]:w-[2.75em]"
+            className="pointer-events-none invisible absolute aspect-video w-[min(36vw,7.25rem)] min-[700px]:w-[2.75em]"
           />
           <span className="flex max-w-full flex-nowrap items-center justify-center gap-[0.12em] whitespace-nowrap min-[700px]:gap-[0.18em]">
             <span>turning</span>

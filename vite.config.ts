@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const MEDIA_ROOT = '/Volumes/Seagate Exp/web material'
+const MEDIA_ROOT = path.resolve('/Users/imac/Desktop/web material')
 
 const MIME: Record<string, string> = {
   '.mp4': 'video/mp4',
@@ -23,6 +23,7 @@ function resolveMedia(urlPath: string): string | null {
   const raw = decodeURIComponent(urlPath.split('?')[0] ?? '')
   if (
     raw !== '/Logo.png' &&
+    raw !== '/golo.png' &&
     !raw.startsWith('/Images/') &&
     !raw.startsWith('/video/')
   ) {

@@ -1,8 +1,9 @@
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { cn } from '@/lib/cn'
-import { Logo } from '@/components/ui/logo'
+import { cn, asset } from '@/lib/cn'
 import { Label } from '@/components/ui/typography'
 import { ScrollTrigger, useGSAP } from '@/lib/gsap'
+import { scrollToTop } from '@/hooks/use-smooth-scroll'
+import { media } from '@/data/site'
 
 export type NavItem = {
   to: string
@@ -14,15 +15,61 @@ type SiteHeaderProps = {
   solidOnMount?: boolean
   mediaHero?: string
   logoAlwaysVisible?: boolean
+  split?: number
+}
+
+function NavItems({ items }: { items: NavItem[] }) {
+  return (
+    <>
+      {items.map((item) =>
+        item.to.startsWith('#') ? (
+          <a
+            key={item.to}
+            href={item.to}
+            className="inline-flex min-h-11 shrink-0 items-center opacity-70 transition-opacity hover:text-accent hover:opacity-100"
+            onClick={(e) => {
+              const t = document.querySelector(item.to)
+              if (!t) return
+              e.preventDefault()
+              const header = document.getElementById('siteHeader')
+              const offset = header?.getBoundingClientRect().height ?? 0
+              const y = t.getBoundingClientRect().top + window.scrollY - offset
+              window.uafSmooth?.scrollTo(y) ?? window.scrollTo({ top: y, behavior: 'smooth' })
+            }}
+          >
+            <Label as="span" className="text-[0.62rem] tracking-[0.1em] min-[700px]:text-[0.75rem] min-[700px]:tracking-[0.12em] min-[860px]:text-[0.86rem] min-[860px]:tracking-[0.2em]">
+              {item.label}
+            </Label>
+          </a>
+        ) : (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            className={({ isActive }) =>
+              cn(
+                'inline-flex min-h-11 shrink-0 items-center opacity-70 transition-opacity hover:text-accent hover:opacity-100',
+                isActive && 'text-accent opacity-100',
+              )
+            }
+          >
+            <Label as="span" className="text-[0.62rem] tracking-[0.1em] min-[700px]:text-[0.75rem] min-[700px]:tracking-[0.12em] min-[860px]:text-[0.86rem] min-[860px]:tracking-[0.2em]">
+              {item.to === '/' ? '← Home' : item.label}
+            </Label>
+          </NavLink>
+        ),
+      )}
+    </>
+  )
 }
 
 export function SiteHeader({
   items,
   solidOnMount = false,
   mediaHero,
-  logoAlwaysVisible = false,
+  split: splitAt,
 }: SiteHeaderProps) {
   const location = useLocation()
+  const split = splitAt ?? Math.ceil(items.length / 2)
 
   useGSAP(
     () => {
@@ -39,6 +86,7 @@ export function SiteHeader({
         header.classList.add('is-solid')
         return
       }
+      header.classList.remove('is-solid')
       ScrollTrigger.create({
         trigger,
         start: 'bottom 90px',
@@ -53,59 +101,42 @@ export function SiteHeader({
     <header
       id="siteHeader"
       className={cn(
-        'fixed top-0 left-0 z-100 flex h-(--header-h) w-full items-center gap-4 border-b border-transparent pt-[env(safe-area-inset-top,0px)] pr-[max(var(--spacing-edge),env(safe-area-inset-right,0px))] pl-[max(var(--spacing-edge),env(safe-area-inset-left,0px))] transition-[background,border-color] duration-400',
-        '[&.is-solid]:border-white/9 [&.is-solid]:bg-black',
+        'fixed top-0 left-0 z-100 grid h-(--header-h) w-full grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 overflow-visible border-0 bg-transparent pr-[max(var(--spacing-edge),env(safe-area-inset-right,0px))] pl-[max(var(--spacing-edge),env(safe-area-inset-left,0px))] max-[699px]:flex max-[699px]:flex-col max-[699px]:justify-end max-[699px]:gap-0 max-[699px]:pb-1',
       )}
     >
+      <nav className="hidden min-w-0 flex-wrap items-center justify-start gap-x-[clamp(8px,1.8vw,28px)] gap-y-1 self-center min-[700px]:flex">
+        <NavItems items={items.slice(0, split)} />
+      </nav>
       <Link
         to="/"
         aria-label="Usama Akbar Films — home"
-        className={cn(
-          'size-8 shrink-0 transition-[opacity,transform] duration-400 sm:size-[34px]',
-          logoAlwaysVisible
-            ? 'opacity-100'
-            : 'site-header__logo opacity-0 -translate-y-1.5 [header.is-solid_&]:translate-y-0 [header.is-solid_&]:opacity-100',
-        )}
+        className="header-brand shrink-0"
+        onClick={(e) => {
+          if (location.pathname !== '/') return
+          e.preventDefault()
+          scrollToTop()
+        }}
       >
-        <Logo className="size-full" />
+        <img
+          src={asset(media.golo)}
+          alt=""
+          width={891}
+          height={233}
+          className="header-brand__golo"
+        />
+        <img
+          src={asset(media.logo)}
+          alt=""
+          width={68}
+          height={68}
+          className="header-brand__ua"
+        />
       </Link>
-      <nav className="ml-auto flex min-w-0 max-w-[calc(100%-2.75rem)] flex-wrap items-center justify-end gap-x-[clamp(10px,2vw,30px)] gap-y-1">
-        {items.map((item) =>
-          item.to.startsWith('#') ? (
-            <a
-              key={item.to}
-              href={item.to}
-              className="opacity-70 transition-opacity hover:text-accent hover:opacity-100"
-              onClick={(e) => {
-                const t = document.querySelector(item.to)
-                if (!t) return
-                e.preventDefault()
-                const y = t.getBoundingClientRect().top + window.scrollY
-                window.uafSmooth?.scrollTo(y) ?? window.scrollTo({ top: y, behavior: 'smooth' })
-              }}
-            >
-              <Label as="span" className="text-[0.58rem] tracking-[0.12em] sm:text-[0.66rem] sm:tracking-[0.2em]">
-                {item.label}
-              </Label>
-            </a>
-          ) : (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              className={({ isActive }) =>
-                cn(
-                  'opacity-70 transition-opacity hover:text-accent hover:opacity-100',
-                  isActive && 'text-accent opacity-100',
-                  item.to === '/' && 'flex items-center gap-2',
-                )
-              }
-            >
-              <Label as="span" className="text-[0.58rem] tracking-[0.12em] sm:text-[0.66rem] sm:tracking-[0.2em]">
-                {item.to === '/' ? '← Home' : item.label}
-              </Label>
-            </NavLink>
-          ),
-        )}
+      <nav className="hidden min-w-0 flex-wrap items-center justify-end gap-x-[clamp(8px,1.8vw,28px)] gap-y-1 self-center min-[700px]:flex">
+        <NavItems items={items.slice(split)} />
+      </nav>
+      <nav className="scroll-x flex w-full min-w-0 items-center justify-center gap-x-[clamp(12px,4vw,22px)] min-[700px]:hidden">
+        <NavItems items={items} />
       </nav>
     </header>
   )

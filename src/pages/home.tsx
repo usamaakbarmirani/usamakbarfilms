@@ -20,7 +20,7 @@ export function HomePage() {
       <Trailer
         src={media.trailer}
         title={'The Upcoming\nShort Film'}
-        body="Created by Usama Akbar."
+        body="Written and directed by Usama Akbar."
       />
       <SpotlightAbout paragraphs={aboutCopy} moreParagraphs={aboutMoreCopy} />
       <Wedge variant="top" />

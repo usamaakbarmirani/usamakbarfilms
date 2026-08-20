@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { cn } from '@/lib/cn'
-import { gsap, useGSAP, ScrollTrigger } from '@/lib/gsap'
+import { asset } from '@/lib/cn'
 import { Label } from '@/components/ui/typography'
 import type { ServiceItem } from '@/data/site'
 
@@ -27,6 +27,18 @@ const themes = {
   },
 } as const
 
+const ROT = [-11, 8, -6, 12, -9, 5, -4, 10]
+const THRESH = 72
+const MAX_TRAIL = 6
+
+type TrailShot = {
+  id: number
+  src: string
+  x: number
+  y: number
+  r: number
+}
+
 function themeFor(title: string) {
   if (title === 'Film' || title === 'Stills') return themes[title]
   return themes.Immersive
@@ -34,69 +46,69 @@ function themeFor(title: string) {
 
 export function Services({ items }: ServicesProps) {
   const [active, setActive] = useState(0)
-  const desc = useRef<HTMLParagraphElement>(null)
-  const last = useRef(-1)
-  const theme = themeFor(items[active]?.title ?? 'Immersive')
+  const [hover, setHover] = useState<number | null>(null)
+  const [trail, setTrail] = useState<TrailShot[]>([])
+  const last = useRef({ x: 0, y: 0, n: 0 })
+  const visual = hover ?? active
+  const theme = themeFor(items[visual]?.title ?? 'Immersive')
 
-  const apply = (i: number) => {
-    if (i === last.current) return
-    last.current = i
-    setActive(i)
-    if (!desc.current || !items[i]) return
-    gsap.killTweensOf(desc.current)
-    desc.current.textContent = items[i].description
-    gsap.fromTo(
-      desc.current,
-      { opacity: 0, y: 8 },
-      { opacity: 0.8, y: 0, duration: 0.35, ease: 'power2.out' },
-    )
+  const drop = (clientX: number, clientY: number, i: number) => {
+    const stills = items[i]?.stills
+    if (!stills?.length) return
+    const dx = clientX - last.current.x
+    const dy = clientY - last.current.y
+    if (last.current.n > 0 && Math.hypot(dx, dy) < THRESH) return
+    last.current = { x: clientX, y: clientY, n: last.current.n + 1 }
+    const shot: TrailShot = {
+      id: last.current.n,
+      src: stills[(last.current.n - 1) % stills.length],
+      x: clientX,
+      y: clientY,
+      r: ROT[(last.current.n - 1) % ROT.length],
+    }
+    setTrail((prev) => [...prev.slice(-(MAX_TRAIL - 1)), shot])
   }
-
-  useGSAP(() => {
-    apply(0)
-    ScrollTrigger.create({
-      trigger: '.svc__pin-height',
-      start: 'top top',
-      end: 'bottom bottom',
-      onUpdate(self) {
-        apply(Math.min(items.length - 1, Math.floor(self.progress * items.length)))
-      },
-    })
-  }, { dependencies: [items] })
 
   return (
     <section
       id="services"
       className={cn('relative transition-colors duration-500', theme.section)}
     >
-      <div className="svc__pin-height h-[300vh]">
-        <div className="sticky top-0 flex h-svh flex-col items-center justify-center px-(--spacing-edge) pt-[calc(var(--header-h)+8px)] pb-[max(1.25rem,env(safe-area-inset-bottom))]">
-          <Label className="absolute top-[calc(var(--header-h)+12px)] left-(--spacing-edge) opacity-60 max-[480px]:text-[0.55rem]">
+      <div className="flex min-h-svh flex-col items-center justify-center px-[max(var(--spacing-edge),env(safe-area-inset-left),env(safe-area-inset-right))] pt-[calc(var(--header-h)+8px)] pb-[max(1.25rem,env(safe-area-inset-bottom))] max-[700px]:min-h-0 max-[700px]:py-[clamp(48px,12vh,96px)]">
+          <Label className="absolute top-[calc(var(--header-h)+12px)] left-(--spacing-edge) z-30 opacity-60 max-[480px]:text-[0.55rem]">
             What I do
           </Label>
-          <Label className="absolute top-[calc(var(--header-h)+12px)] right-(--spacing-edge) opacity-60 max-[480px]:text-[0.55rem]">
-            {String(active + 1).padStart(2, '0')} / {String(items.length).padStart(2, '0')}
-          </Label>
-          <div className="flex w-full max-w-[1400px] flex-col gap-[clamp(4px,0.6vw,12px)]">
+          <div className="flex w-full flex-col items-center justify-center gap-[clamp(18px,3.6vw,52px)] text-center">
             {items.map((item, i) => (
               <Link
                 key={item.title}
                 to={item.href}
-                onMouseEnter={() => apply(i)}
+                onMouseEnter={(e) => {
+                  setActive(i)
+                  setHover(i)
+                  last.current = { x: 0, y: 0, n: 0 }
+                  drop(e.clientX, e.clientY, i)
+                }}
+                onMouseMove={(e) => {
+                  if (hover !== i) setHover(i)
+                  drop(e.clientX, e.clientY, i)
+                }}
+                onMouseLeave={() => {
+                  setHover(null)
+                  setTrail([])
+                  last.current.n = 0
+                }}
                 className={cn(
-                  'flex min-w-0 items-baseline gap-[clamp(12px,2vw,32px)] p-0 transition-opacity duration-350',
-                  i === active ? 'opacity-100' : 'opacity-[0.38]',
+                  'relative flex min-h-11 w-full max-w-full justify-center p-0 py-1 transition-opacity duration-350',
+                  i === visual ? 'z-20 opacity-100' : 'z-0 opacity-[0.34]',
                 )}
               >
-                <Label as="span" className="hidden shrink-0 text-[0.6rem] opacity-70 sm:inline">
-                  {String(i + 1).padStart(2, '0')}
-                </Label>
-                <span className="relative block h-[0.96em] min-w-0 overflow-hidden font-display text-[clamp(1.85rem,11vw,7.4rem)] leading-[0.96] tracking-[0.005em] whitespace-nowrap uppercase">
+                <span className="relative block h-[0.9em] max-w-full overflow-hidden font-display text-[clamp(2.15rem,12vw,10.8rem)] leading-[0.9] tracking-[0.005em] uppercase">
                   <span
                     className={cn(
-                      'block leading-[0.96] transition-[transform,color] duration-550 ease-[var(--ease-out-expo)]',
+                      'block leading-[0.9] transition-[transform,color] duration-550 ease-[var(--ease-out-expo)]',
                       theme.idle,
-                      i === active ? 'translate-y-full' : '',
+                      i === visual ? 'translate-y-full' : '',
                     )}
                   >
                     {item.title}
@@ -104,9 +116,9 @@ export function Services({ items }: ServicesProps) {
                   <span
                     aria-hidden
                     className={cn(
-                      'absolute top-0 left-0 leading-[0.96] transition-[transform,color] duration-550 ease-[var(--ease-out-expo)]',
+                      'absolute top-0 left-0 w-full leading-[0.9] transition-[transform,color] duration-550 ease-[var(--ease-out-expo)]',
                       theme.selected,
-                      i === active ? 'translate-y-0' : '-translate-y-full',
+                      i === visual ? 'translate-y-0' : '-translate-y-full',
                     )}
                   >
                     {item.title}
@@ -115,14 +127,24 @@ export function Services({ items }: ServicesProps) {
               </Link>
             ))}
           </div>
-          <p
-            ref={desc}
-            className="t-body mt-[clamp(18px,3vw,38px)] max-w-[min(52ch,100%)] px-1 text-center font-sans text-[clamp(0.72rem,2.6vw,0.82rem)] font-extralight leading-[1.8] tracking-[0.02em] opacity-80"
-          >
-            {items[0]?.description}
-          </p>
-        </div>
       </div>
+
+      {trail.map((shot, n) => (
+        <img
+          key={shot.id}
+          src={asset(shot.src)}
+          alt=""
+          className="svc-trail pointer-events-none fixed z-80 max-w-none object-cover shadow-[0_14px_36px_rgba(0,0,0,0.4)]"
+          style={{
+            left: shot.x,
+            top: shot.y,
+            width: 'clamp(96px, 12vw, 168px)',
+            height: 'clamp(124px, 16vw, 224px)',
+            zIndex: 80 + n,
+            ['--r' as string]: `${shot.r}deg`,
+          }}
+        />
+      ))}
     </section>
   )
 }

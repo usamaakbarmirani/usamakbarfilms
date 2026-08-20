@@ -7,6 +7,7 @@ import { SiteFooter } from '@/components/layout/site-footer'
 
 const homeNav: NavItem[] = [
   { to: '#about', label: 'About' },
+  { to: '#contact', label: 'Contact' },
   { to: '/film', label: 'Film' },
   { to: '/immersive', label: 'Immersive' },
   { to: '/stills', label: 'Stills' },
@@ -37,6 +38,7 @@ export function PageShell() {
     <>
       <SiteHeader
         items={isHome ? homeNav : innerNav}
+        split={isHome ? 2 : undefined}
         logoAlwaysVisible={!isHome}
         mediaHero={
           pathname === '/film' || pathname === '/immersive' || pathname === '/stills'

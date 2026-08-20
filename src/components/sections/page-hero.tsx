@@ -25,20 +25,19 @@ export function PageHero({
   const [video, setVideo] = useState<HTMLVideoElement | null>(null)
 
   if (media) {
-    const isImage = media.type === 'image'
     return (
       <>
         <section
           className={cn(
             'page-hero--media relative overflow-hidden bg-black',
-            isImage ? '' : 'flex min-h-svh items-center justify-center',
+            media.type === 'video' && 'flex min-h-svh items-center justify-center',
             className,
           )}
         >
           {media.type === 'video' ? (
             <video
               ref={setVideo}
-              className="absolute inset-0 z-1 h-full w-full object-cover"
+              className="absolute inset-0 z-1 h-full w-full object-contain"
               src={asset(media.src)}
               autoPlay
               loop
@@ -54,8 +53,8 @@ export function PageHero({
             />
           )}
           <div className="absolute inset-0 z-2 bg-linear-to-b from-black/72 via-black/25 to-black/88" />
-          <div className="absolute inset-0 z-3 flex items-center justify-center px-(--spacing-edge) text-center">
-            <Display className="m-0 w-full text-center text-[clamp(2.15rem,12vw,13rem)]">
+          <div className="absolute inset-0 z-3 flex items-center justify-center px-[max(var(--spacing-edge),env(safe-area-inset-left),env(safe-area-inset-right))] pt-[var(--header-h)] text-center">
+            <Display className="m-0 w-full max-w-full text-center text-[clamp(1.85rem,11vw,13rem)]">
               {title}
             </Display>
             {children}

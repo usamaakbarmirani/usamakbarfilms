@@ -263,7 +263,7 @@ export function SpotlightAbout({
       <div ref={pin} className="h-[420vh] max-[800px]:h-[280vh]">
         <div
           ref={stage}
-          className={`sticky top-0 z-2 flex h-svh flex-col justify-center bg-black pt-[calc(var(--header-h)+12px)] pr-(--spacing-edge) pb-[clamp(24px,6vh,64px)] pl-(--spacing-edge) ${
+          className={`sticky top-0 z-2 flex h-svh flex-col justify-center bg-black pt-[calc(var(--header-h)+12px)] pr-[max(var(--spacing-edge),env(safe-area-inset-right))] pb-[max(clamp(24px,6vh,64px),env(safe-area-inset-bottom))] pl-[max(var(--spacing-edge),env(safe-area-inset-left))] ${
             open ? 'overflow-y-auto' : 'overflow-hidden'
           }`}
         >
@@ -318,7 +318,7 @@ export function SpotlightAbout({
             <div className="relative z-3 mt-8">
               <button
                 type="button"
-                className="inline-block cursor-pointer border-0 bg-transparent p-0 font-sans text-[clamp(0.9rem,2vw,1.25rem)] leading-[0.9] font-extralight tracking-[0.02em]"
+                className="inline-flex min-h-11 cursor-pointer items-center border-0 bg-transparent p-0 font-sans text-[clamp(0.9rem,2vw,1.25rem)] leading-[0.9] font-extralight tracking-[0.02em]"
                 style={{ color: '#ff0000' }}
                 aria-expanded={open}
                 aria-controls="about-more"

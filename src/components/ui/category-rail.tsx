@@ -42,7 +42,7 @@ export function CategoryRail({ items, trailing, className }: CategoryRailProps) 
   return (
     <nav
       className={cn(
-        'sticky top-(--header-h) z-60 border-b border-white/9 bg-black/86 backdrop-blur-[10px]',
+        'relative border-b border-white/9 bg-black/86 backdrop-blur-[10px]',
         className,
       )}
     >
@@ -52,12 +52,14 @@ export function CategoryRail({ items, trailing, className }: CategoryRailProps) 
             key={item.href}
             href={item.href}
             data-rail={item.href}
-            className="shrink-0 opacity-55 transition-opacity hover:text-accent hover:opacity-100 [&.is-current]:text-accent [&.is-current]:opacity-100"
+            className="inline-flex min-h-11 shrink-0 items-center opacity-55 transition-opacity hover:text-accent hover:opacity-100 [&.is-current]:text-accent [&.is-current]:opacity-100"
             onClick={(e) => {
               const t = document.querySelector(item.href)
               if (!t) return
               e.preventDefault()
-              const y = t.getBoundingClientRect().top + window.scrollY
+              const header = document.getElementById('siteHeader')
+              const offset = header?.getBoundingClientRect().height ?? 0
+              const y = t.getBoundingClientRect().top + window.scrollY - offset
               window.uafSmooth?.scrollTo(y) ?? window.scrollTo({ top: y, behavior: 'smooth' })
             }}
           >

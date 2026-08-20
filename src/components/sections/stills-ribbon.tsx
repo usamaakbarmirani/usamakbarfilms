@@ -201,7 +201,6 @@ export function StillsRibbon({ images, path = ribbonPath }: StillsRibbonProps) {
         <Link to="/stills" className="opacity-45 hover:text-accent">
           <Label as="span">View all stills →</Label>
         </Link>
-        <Label className="opacity-45">{images.length} Stills</Label>
       </div>
     </section>
   )

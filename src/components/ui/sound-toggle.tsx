@@ -22,7 +22,7 @@ export function SoundToggle({ video, className }: SoundToggleProps) {
     <button
       type="button"
       className={cn(
-        'flex cursor-pointer items-center gap-2 border-0 bg-transparent font-inherit text-inherit opacity-75 transition-opacity hover:opacity-100 sm:gap-2.5',
+        'flex cursor-pointer items-center gap-2 border-0 bg-transparent py-2 font-inherit text-inherit opacity-75 transition-opacity hover:opacity-100 sm:gap-2.5',
         className,
       )}
       onClick={() => {

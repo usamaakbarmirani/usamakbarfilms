@@ -10,7 +10,7 @@ npm install
 npm run dev
 ```
 
-Images, video, and `Logo.png` are served live from `/Volumes/Seagate Exp/web material`. Keep that drive mounted. The Black & White folder on disk is named `b:w`; the app maps `/Images/bw/` to it automatically.
+Images and video are served from `~/Desktop/web material`. Logo and footer `intro.mp4` come from `public/`. The Black & White folder on disk is named `b:w`; the app maps `/Images/bw/` to it automatically.
 
 ## Scripts
 

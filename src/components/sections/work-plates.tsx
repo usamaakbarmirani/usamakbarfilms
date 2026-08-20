@@ -4,17 +4,15 @@ import { PlateGrid } from '@/components/ui/plate'
 import type { PlateItem } from '@/data/site'
 
 type WorkPlatesProps = {
-  no: string
   title: string
   tag: string
   plates: PlateItem[]
 }
 
-export function WorkPlates({ no, title, tag, plates }: WorkPlatesProps) {
+export function WorkPlates({ title, tag, plates }: WorkPlatesProps) {
   return (
     <article className="mb-[clamp(56px,9vw,140px)] last:mb-0">
       <header className="mb-[clamp(18px,2.6vw,34px)] flex flex-col items-start gap-2 border-b border-white/12 pb-3.5 sm:flex-row sm:flex-wrap sm:items-baseline sm:gap-[clamp(12px,2vw,26px)]">
-        <Label className="text-accent">{no}</Label>
         <h3 className="m-0 max-w-full font-display text-[clamp(1.6rem,6vw,4.4rem)] leading-none tracking-[0.005em] uppercase">
           {title}
         </h3>

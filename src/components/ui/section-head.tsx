@@ -46,20 +46,16 @@ export function SectionHead({ title, kicker, body, side, className }: SectionHea
 }
 
 type FilmTitleProps = {
-  no: number
   name: string
   tag: string
   body: string
 }
 
-export function FilmTitle({ no, name, tag, body }: FilmTitleProps) {
+export function FilmTitle({ name, tag, body }: FilmTitleProps) {
   return (
     <header className="flex flex-col items-start gap-[clamp(14px,3vw,28px)] px-(--spacing-edge) pt-[clamp(50px,8vw,110px)] pb-[clamp(18px,2.6vw,34px)] lg:flex-row lg:flex-wrap lg:items-end lg:justify-between lg:gap-[clamp(16px,4vw,60px)]">
       <div className="min-w-0 max-w-full">
-        <Label className="mb-2.5 block text-accent">
-          Film {String(no).padStart(2, '0')}
-        </Label>
-        <Display data-rise="" className="max-w-full text-[clamp(2rem,11vw,8.5rem)]">
+        <Display data-rise="" className="max-w-full text-[clamp(1.75rem,9vw,8.5rem)]">
           {name}
         </Display>
       </div>
@@ -71,35 +67,26 @@ export function FilmTitle({ no, name, tag, body }: FilmTitleProps) {
   )
 }
 
-type FramesLabelProps = {
-  count: number
-}
-
-export function FramesLabel({ count }: FramesLabelProps) {
+export function FramesLabel() {
   return (
     <div className="flex items-center gap-3 px-(--spacing-edge) pt-[clamp(26px,4vw,54px)] opacity-50">
       <Label as="span">Frame Grabs</Label>
       <i className="block h-px flex-1 bg-white/16" />
-      <Label as="span">{String(count).padStart(2, '0')}</Label>
     </div>
   )
 }
 
 type SubheadProps = {
   title: string
-  count: number
 }
 
-export function Subhead({ title, count }: SubheadProps) {
+export function Subhead({ title }: SubheadProps) {
   return (
     <div className="my-[clamp(14px,1.8vw,22px)] mt-[clamp(26px,3.4vw,44px)] flex items-center gap-3">
       <b className="font-display text-[clamp(1rem,2.2vw,1.7rem)] font-normal tracking-[0.005em] uppercase">
         {title}
       </b>
       <i className="block h-px flex-1 bg-white/14" />
-      <Label as="span" className="opacity-40">
-        {String(count).padStart(2, '0')}
-      </Label>
     </div>
   )
 }

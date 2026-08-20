@@ -4,6 +4,7 @@ import { asset } from '@/lib/cn'
 import { gsap, useGSAP, ScrollTrigger } from '@/lib/gsap'
 import { ScrollCue } from '@/components/ui/chrome'
 import { SoundToggle } from '@/components/ui/sound-toggle'
+import { Label } from '@/components/ui/typography'
 import { useReducedMotion } from '@/hooks/use-media'
 import { playWithSound } from '@/lib/play-with-sound'
 
@@ -108,16 +109,30 @@ export function ShowreelHero({ src, className }: ShowreelHeroProps) {
         ref={setFeature}
         className="media-stage media-stage--reel absolute top-1/2 left-1/2 z-[3] -translate-x-1/2 -translate-y-1/2"
       >
-        <div className="relative h-0 overflow-hidden bg-black pb-[56.25%]">
-          <video
-            ref={setVideo}
-            src={asset(src)}
-            loop
-            muted
-            playsInline
-            preload="auto"
-            className="absolute inset-0 h-full w-full object-cover"
-          />
+        <div className="relative">
+          <div className="relative h-0 overflow-hidden bg-black pb-[43.75%]">
+            <video
+              ref={setVideo}
+              src={asset(src)}
+              loop
+              muted
+              playsInline
+              preload="auto"
+              className="absolute inset-0 h-full w-full object-cover object-center"
+            />
+          </div>
+          <div className="reel-frame pointer-events-none absolute inset-0 z-2" aria-hidden>
+            <span className="reel-frame__corner reel-frame__corner--tl" />
+            <span className="reel-frame__corner reel-frame__corner--tr" />
+            <span className="reel-frame__corner reel-frame__corner--bl" />
+            <span className="reel-frame__corner reel-frame__corner--br" />
+            <span className="reel-frame__rec">
+              <i />
+              <Label as="span" className="text-[0.55rem] tracking-[0.22em] text-white/80">
+                Rec
+              </Label>
+            </span>
+          </div>
         </div>
       </div>
       <div className="absolute right-[max(var(--spacing-edge),env(safe-area-inset-right))] bottom-[max(1.25rem,env(safe-area-inset-bottom),clamp(20px,4vh,60px))] z-[6]">
