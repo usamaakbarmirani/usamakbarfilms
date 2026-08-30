@@ -101,7 +101,7 @@ export function SiteHeader({
     <header
       id="siteHeader"
       className={cn(
-        'fixed top-0 left-0 z-100 grid h-(--header-h) w-full grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 overflow-visible border-0 bg-transparent pr-[max(var(--spacing-edge),env(safe-area-inset-right,0px))] pl-[max(var(--spacing-edge),env(safe-area-inset-left,0px))] max-[699px]:flex max-[699px]:flex-col max-[699px]:justify-end max-[699px]:gap-0 max-[699px]:pb-1',
+        'fixed top-0 left-0 z-100 grid h-(--header-h) w-full grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 overflow-visible border-0 bg-transparent pr-[max(var(--spacing-edge),env(safe-area-inset-right,0px))] pl-[max(var(--spacing-edge),env(safe-area-inset-left,0px))] max-[699px]:flex max-[699px]:flex-col max-[699px]:justify-start max-[699px]:gap-1 max-[699px]:pb-2',
       )}
     >
       <nav className="hidden min-w-0 flex-wrap items-center justify-start gap-x-[clamp(8px,1.8vw,28px)] gap-y-1 self-center min-[700px]:flex">
@@ -110,7 +110,7 @@ export function SiteHeader({
       <Link
         to="/"
         aria-label="Usama Akbar Films — home"
-        className="header-brand shrink-0"
+        className="header-brand shrink-0 max-[699px]:order-1"
         onClick={(e) => {
           if (location.pathname !== '/') return
           e.preventDefault()
@@ -135,7 +135,7 @@ export function SiteHeader({
       <nav className="hidden min-w-0 flex-wrap items-center justify-end gap-x-[clamp(8px,1.8vw,28px)] gap-y-1 self-center min-[700px]:flex">
         <NavItems items={items.slice(split)} />
       </nav>
-      <nav className="scroll-x flex w-full min-w-0 items-center justify-center gap-x-[clamp(12px,4vw,22px)] min-[700px]:hidden">
+      <nav className="header-nav-mobile relative z-20 flex w-full min-w-0 scroll-x items-center justify-center gap-x-[clamp(12px,4vw,22px)] min-[700px]:hidden max-[699px]:order-2">
         <NavItems items={items} />
       </nav>
     </header>

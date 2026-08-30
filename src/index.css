@@ -17,8 +17,8 @@
 }
 
 @media (max-width: 699px) {
-  :root {
-    --header-h: calc(92px + env(safe-area-inset-top, 0px));
+  html {
+    --header-h: calc(214px + env(safe-area-inset-top, 0px));
   }
 }
 @media (min-width: 860px) {
@@ -115,7 +115,7 @@
 
 @media (max-width: 699px) {
   .manifesto-type {
-    font-size: clamp(12px, calc((100vw - 2.5rem) / 16.5), 17px);
+    font-size: clamp(20px, calc((100vw - 2.25rem) / 11.5), 30px);
   }
 }
 
@@ -194,17 +194,21 @@ header.is-solid .header-brand__ua {
 @media (max-width: 699px) {
   .header-brand {
     align-self: center;
-    width: clamp(88px, 36vw, 150px);
-    height: 44px;
+    width: clamp(220px, 78vw, 360px);
+    height: 152px;
   }
   .header-brand__golo {
-    height: 52px;
-    max-width: min(48vw, 180px);
-    transform: translate(-50%, -50%);
+    height: 152px;
+    max-width: min(90vw, 400px);
+    transform: translate(-50%, calc(-50% - 5vh));
   }
   .header-brand__ua {
-    height: 40px;
-    max-width: 140px;
+    height: 56px;
+    max-width: 180px;
+    transform: translate(-50%, calc(-50% - 5vh));
+  }
+  .header-nav-mobile {
+    transform: translateY(-10vh);
   }
 }
 @media (min-width: 860px) {
